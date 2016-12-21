@@ -3,7 +3,7 @@
     angular.module("SearchApp",[])
     .controller("SearchController", SearchController)
     .service("SearchService", SearchService)
-    .constant("ApiBasePath", "http://davids-restaurant.herokuapp.com")
+    .constant("ApiBasePath", "https://davids-restaurant.herokuapp.com")
     .directive("myList", ListDirective);
 
     function ListDirective(){
@@ -19,7 +19,6 @@
     function SearchController(SearchService, $q){
         var vm = this;
         vm.searchInput = "";
-        vm.advice = "";
         vm.menuTitle = "Menu List";
         vm.foundTitle = "Found List";
 
@@ -37,7 +36,6 @@
                 vm.foundItems = [];
                 vm.results = "";
                 vm.countItem = 0;
-                vm.advice = "The Found List is below to Menu List."
                 vm.items = response.data.menu_items;
                 for(var i = 0; i < vm.items.length;i++){
                     if(vm.items[i].description.indexOf(vm.searchInput) !== -1){
