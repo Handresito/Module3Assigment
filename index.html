@@ -1,0 +1,17 @@
+<html ng-app="SearchApp">
+    <head>
+        <title>Module 3 Assignment</title>
+        <script src="angular.min.js"></script>
+        <script src="app.js"></script>
+    </head>
+    <body>
+        <h1>Search Exercise</h1>
+        <div ng-controller="SearchController as list">
+            <ol>
+                <li ng-repeat="item in list.items">
+                    {{item}}
+                </li>
+            </ol>
+        </div>
+    </body>
+</html>
