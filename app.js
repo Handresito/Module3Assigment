@@ -38,7 +38,7 @@
                 vm.countItem = 0;
                 vm.items = response.data.menu_items;
                 for(var i = 0; i < vm.items.length;i++){
-                    if(vm.items[i].description.toLowerCase.indexOf(vm.searchInput) !== -1){
+                    if(vm.items[i].description.toLowerCase().indexOf(vm.searchInput) !== -1){
                         vm.foundItems.push(vm.items[i]);
                         vm.countItem++;
                     }
