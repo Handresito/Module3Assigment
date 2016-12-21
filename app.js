@@ -3,30 +3,76 @@
     angular.module("SearchApp",[])
     .controller("SearchController", SearchController)
     .service("SearchService", SearchService)
-    .constant("http://davids-restaurant.herokuapp.com", ApiBasePath);
+    .constant("ApiBasePath", "http://davids-restaurant.herokuapp.com")
+    .directive("myList", ListDirective);
 
-    SearchController.$inject = ['SearchService'];
-    function SearchController(SearchService){
-        var vm = this;
-        vm.items = SearchService.getItems();
+    function ListDirective(){
+        var ddo = {
+            templateUrl: 'list.html',
+            title: '@'
+        };
+
+        return ddo;
     };
 
-    SearchService.$inject = ['$http']
-    function SearchService($http){
-        var service = this;
-        service.items = [];
+    SearchController.$inject = ['SearchService','$q'];
+    function SearchController(SearchService, $q){
+        var vm = this;
+        vm.searchInput = "";
+        vm.advice = "";
+        vm.menuTitle = "Menu List";
+        vm.foundTitle = "Found List";
 
-        $http({
-            method: 'GET',
-            url: ApiBasePath + "/menu_items.json"
-        }).then(function(response){
-            service.items = response.data;
-        }, function(error){
-            console.log(error.message);
-        });
-
-        service.getItems = function(){
-            return service.items;
+        vm.removeItem = function(index){
+            vm.items.splice(index, 1);
+        }
+        
+        vm.getItems = function(){
+            if(vm.searchInput.trim() === ""){
+                alert("Insert data in the textbox.");
+                return;
+            }
+            var promise = SearchService.getMenuItem();
+            promise.then(function(response){
+                vm.foundItems = [];
+                vm.results = "";
+                vm.countItem = 0;
+                vm.advice = "The Found List is below to Menu List."
+                vm.items = response.data.menu_items;
+                for(var i = 0; i < vm.items.length;i++){
+                    if(vm.items[i].description.indexOf(vm.searchInput) !== -1){
+                        vm.foundItems.push(vm.items[i]);
+                        vm.countItem++;
+                    }
+                    if(vm.countItem === 0){
+                        vm.results = "Nothing found."
+                    }
+                    else{
+                        vm.results = "There are " + vm.foundItems.length  + " results."
+                    }
+                }
+                vm.searchInput = "";
+            })
+            .catch(function(error){
+                console.log("Something wrong happen.");
+            });
         };
+    };
+
+    SearchService.$inject = ['$http', 'ApiBasePath']
+    function SearchService($http, ApiBasePath){
+        var service = this;
+        
+        service.getMenuItem = function(){
+            var response = $http({
+                method: 'GET',
+                url: ApiBasePath + "/menu_items.json"
+            });
+            return response;
+        };
+
+        
+
+        
     };
 })();

@@ -3,15 +3,52 @@
         <title>Module 3 Assignment</title>
         <script src="angular.min.js"></script>
         <script src="app.js"></script>
+        <style>
+            span{
+                font-weight: bold;
+            }
+
+            #list1{
+                width:50%;
+            }
+
+            #list1{
+                float:left;
+                margin-right: 40px;
+            }
+
+            .advice{
+                color: green;
+            }
+
+            .notfound{
+                color: blue;
+            }
+        </style>
     </head>
     <body>
-        <h1>Search Exercise</h1>
+        <h1>Menu Item Search Practice</h1>
         <div ng-controller="SearchController as list">
-            <ol>
-                <li ng-repeat="item in list.items">
-                    {{item}}
-                </li>
-            </ol>
+            <div>
+                <input type="text" placeholder="insert data to search" ng-model="list.searchInput">
+                <button ng-click="list.getItems()">Narrow It Down For Me!</button>
+            </div>
+            <div>
+                <span class="notfound">{{list.results}}</span>
+            </div>
+            <my-list title="{{list.menuTitle}}" id="list1"></my-list>
+            <div ng-show="list.foundItems.length > 0" id="list2">
+            <h1>Found List</h1>
+                <ul>
+                    <li ng-repeat="item in list.foundItems">
+                        <span>Name:</span> {{item.name}}, 
+                        <br> <span>Short Name:</span> {{item.short_name}}, 
+                        <br> <span>Description:</span> {{item.description}}.
+                        <br><br>
+                    </li>
+                </ul>
+            </div>
+            
         </div>
     </body>
 </html>
